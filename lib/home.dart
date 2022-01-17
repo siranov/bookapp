@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
+int curPage = 0;
+
 class HomePage extends StatefulWidget {
+  final VoidCallback update;
+
+  const HomePage({Key key, this.update}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -19,7 +24,9 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      drawer: DrawerWid(),
+      drawer: DrawerWid(
+        update: widget.update,
+      ),
       body: ListWidget(),
     );
   }
@@ -86,6 +93,9 @@ class _ListWidgetState extends State<ListWidget> {
 }
 
 class DrawerWid extends StatefulWidget {
+  final VoidCallback update;
+
+  const DrawerWid({Key key, this.update}) : super(key: key);
   @override
   _DrawerWidState createState() => _DrawerWidState();
 }
@@ -96,10 +106,63 @@ class _DrawerWidState extends State<DrawerWid> {
     return Drawer(
       child: Column(
         children: [
+          Container(height: 80),
           Container(
             height: 150,
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 20),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(Icons.person),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text('Guest', style: TextStyle(fontSize: 16)),
+                  ),
+                ),
+              ],
+            ),
           ),
+          section('Main Page', Icons.home, 0, () {
+            widget.update();
+          }),
+          section('Sell', Icons.book, 1, () {
+            widget.update();
+          }),
         ],
+      ),
+    );
+  }
+
+  Widget section(name, icon, i, callback) {
+    return GestureDetector(
+      onTap: () {
+        curPage = i;
+        callback();
+      },
+      child: Container(
+        color: curPage == i ? Colors.deepOrange : Colors.transparent,
+        height: 60,
+        child: Padding(
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(name, style: TextStyle(fontSize: 16)),
+              ),
+              Icon(icon, size: 20),
+            ],
+          ),
+        ),
       ),
     );
   }

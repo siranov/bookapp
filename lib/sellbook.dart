@@ -1,3 +1,4 @@
+import 'package:bookapp/home.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +11,9 @@ String profName;
 String bookName;
 
 class SellBook extends StatefulWidget {
+  final update;
+
+  const SellBook({Key key, this.update}) : super(key: key);
   @override
   _SellBookState createState() => _SellBookState();
 }
@@ -51,6 +55,13 @@ class _SellBookState extends State<SellBook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: DrawerWid(
+        update: widget.update,
+      ),
+      appBar: AppBar(
+        title: Text('Sell Book'),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: ListView(
