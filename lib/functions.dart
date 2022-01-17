@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TestWidget extends StatefulWidget {
   @override
@@ -7,9 +11,19 @@ class TestWidget extends StatefulWidget {
 }
 
 class _TestWidgetState extends State<TestWidget> {
+  upl() async {
+    PickedFile pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    uploadBookImage(File(pickedFile.path));
+  }
+
   @override
   void initState() {
     getBooks();
+    upl();
     super.initState();
   }
 
@@ -66,3 +80,17 @@ var bookData = {
   'picFile': '', //put your file variable here
   'condition': 'Good', //put your condition variable here
 };
+
+uploadBookImage(File file) async {
+  var path = '/123123123.png';
+  try {
+    await FirebaseStorage.instance
+        .ref()
+        .child('Books')
+        .child(path)
+        .putFile(file);
+    print('uploaded');
+  } catch (err) {
+    print(err);
+  }
+}

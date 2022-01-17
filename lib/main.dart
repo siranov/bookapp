@@ -24,13 +24,15 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
-      home: curPage == 0
-          ? HomePage(
-              update: sets,
-            )
-          : SellBook(
-              update: sets,
-            ),
+      home:
+          // TestWidget(),
+          curPage == 0
+              ? HomePage(
+                  update: sets,
+                )
+              : SellBook(
+                  update: sets,
+                ),
     );
   }
 
