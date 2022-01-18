@@ -1,5 +1,6 @@
 import 'package:bookapp/functions.dart';
 import 'package:bookapp/home.dart';
+import 'package:bookapp/mybooks.dart';
 import 'package:bookapp/sellbook.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Book App',
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
@@ -30,9 +31,11 @@ class _MyAppState extends State<MyApp> {
               ? HomePage(
                   update: sets,
                 )
-              : SellBook(
-                  update: sets,
-                ),
+              : curPage == 1
+                  ? SellBook(
+                      update: sets,
+                    )
+                  : MyBooks(),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:bookapp/functions.dart';
 import 'package:bookapp/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -240,34 +241,62 @@ class _SellBookState extends State<SellBook> {
             ),
             Container(height: 30),
             GestureDetector(
-              onTap: () {
-                if (checkFields() == true) {
-                  print('worked');
+                onTap: () {
+                  if (checkFields() == true) {
+                    print('worked');
 
-                  var bookData = {
-                    'bookname': bookName, //put your bookname variable here
-                    'sellerId': sellerName, //this ill get after auth
-                    'course': course, //put your course variable here
-                    'price': price, //put your price variable here
-                    'picFile': imageFile, //put your file variable here
-                    'condition': condition, //put your condition variable here
-                  };
-                } else {
-                  print('fields are empty');
-                }
-              },
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.deepOrange,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Center(
-                  child: Text(
-                    " Upload Book",
-                    style: TextStyle(fontSize: 15),
+                    var bookData = {
+                      'bookname': bookName, //put your bookname variable here
+                      'sellerId': sellerName, //this ill get after auth
+                      'course': course, //put your course variable here
+                      'price': price, //put your price variable here
+                      'picFile': imageFile, //put your file variable here
+                      'condition': condition, //put your condition variable here
+                    };
+                  } else {
+                    print('fields are empty');
+                  }
+                },
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.deepOrange,
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                ),
+                )),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    color: Colors.deepOrange,
+                    onPressed: () {
+                      if (checkFields() == true) {
+                        print('worked');
+                        var bookData = {
+                          'bookname':
+                              bookName, //put your bookname variable here
+                          'sellerId': sellerName, //this ill get after auth
+                          'course': course, //put your course variable here
+                          'price': price, //put your price variable here
+                          'picFile': imageFile, //put your file variable here
+                          'condition':
+                              condition, //put your condition variable here
+                        };
+                        uploadBookImage(imageFile, bookData);
+                      } else {
+                        print('fields are empty');
+                      }
+                    },
+                    child: Center(
+                      child: Text(
+                        " Upload Book",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -314,9 +343,6 @@ checkFields() {
     everythingIsCorrect = false;
   }
   if (course == '') {
-    everythingIsCorrect = false;
-  }
-  if (sellerName == '') {
     everythingIsCorrect = false;
   }
   if (price < 0) {

@@ -11,19 +11,8 @@ class TestWidget extends StatefulWidget {
 }
 
 class _TestWidgetState extends State<TestWidget> {
-  upl() async {
-    PickedFile pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    uploadBookImage(File(pickedFile.path));
-  }
-
   @override
   void initState() {
-    getBooks();
-    upl();
     super.initState();
   }
 
@@ -32,9 +21,7 @@ class _TestWidgetState extends State<TestWidget> {
     return Scaffold(
       body: Center(
         child: GestureDetector(
-            onTap: () {
-              addBook();
-            },
+            onTap: () {},
             child: Container(
               color: Colors.purple,
               height: 50,
@@ -60,37 +47,41 @@ getBooks() async {
   });
 }
 
-addBook() async {
-  await FirebaseFirestore.instance.collection('Books').add({
-    'bookname': 'Book book book',
-    'sellerId': 'siranov',
-    'course': 'Phys 53',
-    'price': 26,
-    'pic':
-        'https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED',
-    'condition': 'Good',
-  });
+addBook(dataPayload) async {
+  await FirebaseFirestore.instance.collection('Books').add(dataPayload);
+  print('uploaded to firestore');
 }
 
-var bookData = {
-  'bookname': 'Book book book', //put your bookname variable here
-  'sellerId': 'siranov', //this ill get after auth
-  'course': 'Phys 53', //put your course variable here
-  'price': 26, //put your price variable here
-  'picFile': '', //put your file variable here
-  'condition': 'Good', //put your condition variable here
-};
-
-uploadBookImage(File file) async {
-  var path = '/123123123.png';
+uploadBookImage(File file, load) async {
+  var path = '/${file.path}${DateTime.now()}.png';
+  print(path);
   try {
+    var urlGetter;
+    var url;
     await FirebaseStorage.instance
         .ref()
         .child('Books')
         .child(path)
-        .putFile(file);
-    print('uploaded');
+        .putFile(file)
+        .then((file) {
+      urlGetter = file.ref.getDownloadURL();
+    });
+    url = await urlGetter;
+    print('uploaded $url');
+    print('uploading firestore');
+    addBook({
+      'bookname': load['bookname'],
+      'sellerId': 'siranov',
+      'course': load['course'],
+      'price': load['price'],
+      'pic': url,
+      'condition': load['condition'],
+    });
   } catch (err) {
     print(err);
   }
+}
+
+uploadNewBook(bookPayload) {
+  uploadBookImage(bookPayload['file'], bookPayload);
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 int curPage = 0;
@@ -38,57 +39,163 @@ class ListWidget extends StatefulWidget {
 }
 
 class _ListWidgetState extends State<ListWidget> {
+  ScrollController scroll = new ScrollController();
+
+  List<DocumentSnapshot> books = [];
+
+  bool loadedFirst = false;
+
+  bool loadingNew = false;
+  bool gotAllBooks = false;
+
+  @override
+  void initState() {
+    scroll.addListener(() {
+      scrollListener();
+    });
+    loadFirstBooks();
+    super.initState();
+  }
+
+  scrollListener() {
+    if (scroll.position.maxScrollExtent - scroll.position.pixels < 250 &&
+        !loadingNew &&
+        !gotAllBooks) {
+      loadMoreBooks();
+    }
+  }
+
+  loadMoreBooks() async {
+    print('adding more books...');
+    loadingNew = true;
+    await FirebaseFirestore.instance
+        .collection('Books')
+        .limit(5)
+        .startAfterDocument(books.last)
+        .get()
+        .then((q) {
+      books.addAll(q.docs);
+      if (q.docs.length < 5) {
+        gotAllBooks = true;
+        print('Got all books from the list');
+      }
+    });
+    print('added more books, current length is ${books.length}');
+    loadingNew = false;
+    setState(() {});
+  }
+
+  loadFirstBooks() async {
+    var docs =
+        await FirebaseFirestore.instance.collection('Books').limit(5).get();
+    books.addAll(docs.docs);
+    loadedFirst = true;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.maxFinite,
-      child: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: EdgeInsets.only(
-                  left: 10, right: 10, top: index == 0 ? 20 : 0, bottom: 20),
-              child: Container(
-                height: 250,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
-                    boxShadow: [
-                      BoxShadow(blurRadius: 3, color: Colors.black38)
-                    ]),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Column(
-                          children: [
-                            Text('Cat in the Hat',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold)),
-                          ],
-                        ),
+        width: double.maxFinite,
+        child: loadedFirst
+            ? ListView.builder(
+                controller: scroll,
+                itemCount: books.length,
+                itemBuilder: (context, index) {
+                  final data = books[index].data() as Map<String, dynamic>;
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        top: index == 0 ? 20 : 0,
+                        bottom: 20),
+                    child: Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          boxShadow: [
+                            BoxShadow(blurRadius: 3, color: Colors.black38)
+                          ]),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                children: [
+                                  Text(data['bookname'],
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              width: double.maxFinite,
+                              height: 250,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(4),
+                                    bottomRight: Radius.circular(4)),
+                                child: Image(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(data['pic'])),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                        width: double.maxFinite,
-                        height: 250,
-                        child: ClipRRect(
-                          child: Image(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                  'https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=590&h=800&D80F3D79-4382-49FA-BE4B4D0C62A5C3ED')),
-                        ),
+                  );
+                })
+            : ListView.builder(
+                itemCount: 3,
+                itemBuilder: (ctx, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        top: index == 0 ? 20 : 0,
+                        bottom: 20),
+                    child: Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          boxShadow: [
+                            BoxShadow(blurRadius: 3, color: Colors.black38)
+                          ]),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: List.generate(
+                                    5,
+                                    (i) => Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Container(
+                                            height: 20,
+                                            color: Colors.black12,
+                                          ),
+                                        ))),
+                          ),
+                          Expanded(
+                            child: Center(
+                              child: Icon(Icons.image),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            );
-          }),
-    );
+                  );
+                }));
   }
 }
 
@@ -138,6 +245,9 @@ class _DrawerWidState extends State<DrawerWid> {
           section('Sell', Icons.book, 1, () {
             widget.update();
           }),
+          section('My listings', Icons.attach_money, 2, () {
+            widget.update();
+          }),
         ],
       ),
     );
@@ -157,9 +267,17 @@ class _DrawerWidState extends State<DrawerWid> {
           child: Row(
             children: [
               Expanded(
-                child: Text(name, style: TextStyle(fontSize: 16)),
+                child: Text(name,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: curPage == i ? Colors.white : Colors.black)),
               ),
-              Icon(icon, size: 20),
+              Icon(
+                icon,
+                size: 20,
+                color: curPage == i ? Colors.white : Colors.black,
+              ),
             ],
           ),
         ),
