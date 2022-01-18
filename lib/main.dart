@@ -20,22 +20,27 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Book App',
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: MaterialApp(
+        title: 'Book App',
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+        ),
+        home:
+            // TestWidget(),
+            curPage == 0
+                ? HomePage(
+                    update: sets,
+                  )
+                : curPage == 1
+                    ? SellBook(
+                        update: sets,
+                      )
+                    : MyBooks(),
       ),
-      home:
-          // TestWidget(),
-          curPage == 0
-              ? HomePage(
-                  update: sets,
-                )
-              : curPage == 1
-                  ? SellBook(
-                      update: sets,
-                    )
-                  : MyBooks(),
     );
   }
 

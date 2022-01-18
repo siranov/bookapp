@@ -5,13 +5,14 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-String condition;
+String condition = '';
 double price = 0;
-String sellerName;
-String course;
-String profName;
-String bookName;
+String sellerName = '';
+String course = '';
+String profName = '';
+String bookName = '';
 dynamic imageFile;
+int increment = 0;
 
 class SellBook extends StatefulWidget {
   final update;
@@ -36,6 +37,7 @@ class _SellBookState extends State<SellBook> {
       picked = true;
       setState(() {});
       Navigator.of(context).pop();
+      //remove keyboard
     }
   }
 
@@ -53,6 +55,15 @@ class _SellBookState extends State<SellBook> {
       print('im here');
       setState(() {});
       Navigator.of(context).pop();
+      //remove keyboard
+    }
+  }
+
+  checkIncrement(value) {
+    if (value.length == 0) {
+      setState(() {});
+    } else if (value.length == 1) {
+      setState(() {});
     }
   }
 
@@ -74,6 +85,7 @@ class _SellBookState extends State<SellBook> {
               child: TextFormField(
                 onChanged: (value) {
                   bookName = value;
+                  checkIncrement(value);
                 },
                 cursorColor: Theme.of(context).cursorColor,
                 decoration: InputDecoration(
@@ -94,6 +106,7 @@ class _SellBookState extends State<SellBook> {
               child: TextFormField(
                 onChanged: (value) {
                   profName = value;
+                  checkIncrement(value);
                 },
                 cursorColor: Theme.of(context).cursorColor,
                 decoration: InputDecoration(
@@ -114,6 +127,7 @@ class _SellBookState extends State<SellBook> {
               child: TextFormField(
                 onChanged: (value) {
                   course = value;
+                  checkIncrement(value);
                 },
                 cursorColor: Theme.of(context).cursorColor,
                 decoration: InputDecoration(
@@ -134,7 +148,8 @@ class _SellBookState extends State<SellBook> {
               child: TextFormField(
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
-                  price = double.parse(value);
+                  price = value.length != 0 ? double.parse(value) : null;
+                  checkIncrement(value);
                 },
                 cursorColor: Theme.of(context).cursorColor,
                 decoration: InputDecoration(
@@ -155,6 +170,7 @@ class _SellBookState extends State<SellBook> {
               child: TextFormField(
                 onChanged: (value) {
                   condition = value;
+                  checkIncrement(value);
                 },
                 cursorColor: Theme.of(context).cursorColor,
                 decoration: InputDecoration(
@@ -242,6 +258,7 @@ class _SellBookState extends State<SellBook> {
             Container(height: 30),
             GestureDetector(
                 onTap: () {
+                  //show the dialog
                   if (checkFields() == true) {
                     var bookData = {
                       'bookname': bookName, //put your bookname variable here
@@ -249,9 +266,19 @@ class _SellBookState extends State<SellBook> {
                       'course': course, //put your course variable here
                       'price': price, //put your price variable here
                       'picFile': imageFile, //put your file variable here
-                      'condition': condition, //put your condition variable here
+                      'condition': condition
                     };
-                    uploadNewBook(bookData);
+                    showDialog(
+                        context: context,
+                        builder: (ctxt) {
+                          return Center(
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  child:
+                                      CircularProgressIndicator())); //put your condition variable here
+                        });
+                    // uploadNewBook(bookData);
                   } else {
                     print('fields are empty');
                   }
@@ -259,7 +286,7 @@ class _SellBookState extends State<SellBook> {
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.deepOrange,
+                    color: checkFields() ? Colors.deepOrange : Colors.grey,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Center(
@@ -306,6 +333,9 @@ class DialogWid extends StatelessWidget {
 
 checkFields() {
   bool everythingIsCorrect = true;
+  if (imageFile == null) {
+    everythingIsCorrect = false;
+  }
   if (bookName == '') {
     everythingIsCorrect = false;
   }
@@ -315,14 +345,12 @@ checkFields() {
   if (course == '') {
     everythingIsCorrect = false;
   }
-  if (price < 0) {
+  if (price != null ? (price < 0) : false) {
     everythingIsCorrect = false;
   }
   if (condition == '') {
     everythingIsCorrect = false;
   }
-  if (imageFile == null) {
-    everythingIsCorrect = false;
-  }
+
   return everythingIsCorrect;
 }
