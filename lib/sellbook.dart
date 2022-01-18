@@ -263,42 +263,13 @@ class _SellBookState extends State<SellBook> {
                     color: Colors.deepOrange,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                )),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RaisedButton(
-                    color: Colors.deepOrange,
-                    onPressed: () {
-                      if (checkFields() == true) {
-                        print('worked');
-                        var bookData = {
-                          'bookname':
-                              bookName, //put your bookname variable here
-                          'sellerId': sellerName, //this ill get after auth
-                          'course': course, //put your course variable here
-                          'price': price, //put your price variable here
-                          'picFile': imageFile, //put your file variable here
-                          'condition':
-                              condition, //put your condition variable here
-                        };
-                        uploadBookImage(imageFile, bookData);
-                      } else {
-                        print('fields are empty');
-                      }
-                    },
-                    child: Center(
-                      child: Text(
-                        " Upload Book",
-                        style: TextStyle(fontSize: 15),
-                      ),
+                  child: Center(
+                    child: Text(
+                      " Upload Book",
+                      style: TextStyle(fontSize: 15),
                     ),
                   ),
-                ],
-              ),
-            ),
+                )),
           ],
         ));
   }
