@@ -1,3 +1,4 @@
+import 'package:bookapp/functions.dart';
 import 'package:bookapp/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -229,7 +230,6 @@ class _SellBookState extends State<SellBook> {
                       onPressed: () {
                         if (checkFields() == true) {
                           print('worked');
-
                           var bookData = {
                             'bookname':
                                 bookName, //put your bookname variable here
@@ -240,6 +240,7 @@ class _SellBookState extends State<SellBook> {
                             'condition':
                                 condition, //put your condition variable here
                           };
+                          uploadBookImage(imageFile, bookData);
                         } else {
                           print('fields are empty');
                         }
@@ -299,9 +300,6 @@ checkFields() {
     everythingIsCorrect = false;
   }
   if (course == '') {
-    everythingIsCorrect = false;
-  }
-  if (sellerName == '') {
     everythingIsCorrect = false;
   }
   if (price < 0) {

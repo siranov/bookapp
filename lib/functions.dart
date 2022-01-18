@@ -11,15 +11,6 @@ class TestWidget extends StatefulWidget {
 }
 
 class _TestWidgetState extends State<TestWidget> {
-  upl() async {
-    PickedFile pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    uploadBookImage(File(pickedFile.path));
-  }
-
   @override
   void initState() {
     super.initState();
@@ -30,9 +21,7 @@ class _TestWidgetState extends State<TestWidget> {
     return Scaffold(
       body: Center(
         child: GestureDetector(
-            onTap: () {
-              upl();
-            },
+            onTap: () {},
             child: Container(
               color: Colors.purple,
               height: 50,
@@ -63,8 +52,9 @@ addBook(dataPayload) async {
   print('uploaded to firestore');
 }
 
-uploadBookImage(File file) async {
-  var path = '/123123123.png';
+uploadBookImage(File file, load) async {
+  var path = '/${file.path}${DateTime.now()}.png';
+  print(path);
   try {
     var urlGetter;
     var url;
@@ -80,14 +70,18 @@ uploadBookImage(File file) async {
     print('uploaded $url');
     print('uploading firestore');
     addBook({
-      'bookname': 'Book book book',
+      'bookname': load['bookname'],
       'sellerId': 'siranov',
-      'course': 'Phys 53',
-      'price': 26,
+      'course': load['course'],
+      'price': load['price'],
       'pic': url,
-      'condition': 'Good',
+      'condition': load['condition'],
     });
   } catch (err) {
     print(err);
   }
+}
+
+uploadNewBook(bookPayload) {
+  uploadBookImage(bookPayload['file'], bookPayload);
 }
