@@ -245,7 +245,7 @@ class _SellBookState extends State<SellBook> {
                   if (checkFields() == true) {
                     var bookData = {
                       'bookname': bookName, //put your bookname variable here
-                      'sellerId': sellerName, //this ill get after auth
+                      'profname': profName,
                       'course': course, //put your course variable here
                       'price': price, //put your price variable here
                       'picFile': imageFile, //put your file variable here
