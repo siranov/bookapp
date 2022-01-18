@@ -243,8 +243,6 @@ class _SellBookState extends State<SellBook> {
             GestureDetector(
                 onTap: () {
                   if (checkFields() == true) {
-                    print('worked');
-
                     var bookData = {
                       'bookname': bookName, //put your bookname variable here
                       'sellerId': sellerName, //this ill get after auth
@@ -253,6 +251,7 @@ class _SellBookState extends State<SellBook> {
                       'picFile': imageFile, //put your file variable here
                       'condition': condition, //put your condition variable here
                     };
+                    uploadNewBook(bookData);
                   } else {
                     print('fields are empty');
                   }

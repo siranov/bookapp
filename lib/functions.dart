@@ -83,5 +83,5 @@ uploadBookImage(File file, load) async {
 }
 
 uploadNewBook(bookPayload) {
-  uploadBookImage(bookPayload['file'], bookPayload);
+  uploadBookImage(bookPayload['picFile'], bookPayload);
 }
