@@ -1,3 +1,4 @@
+import 'package:bookapp/home.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,9 @@ String bookName;
 dynamic imageFile;
 
 class SellBook extends StatefulWidget {
+  final update;
+
+  const SellBook({Key key, this.update}) : super(key: key);
   @override
   _SellBookState createState() => _SellBookState();
 }
@@ -53,34 +57,42 @@ class _SellBookState extends State<SellBook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        // padding: ,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 40.0),
-            child: TextFormField(
-              onChanged: (value) {
-                bookName = value;
-              },
-              cursorColor: Theme.of(context).cursorColor,
-              initialValue: 'Insert Name',
-              maxLength: 20,
-              decoration: InputDecoration(
-                icon: Icon(Icons.favorite),
-                labelText: 'Book Name',
-                labelStyle: TextStyle(
-                  color: Color(0xFF6200EE),
-                ),
-                helperText: 'Helper text',
-                suffixIcon: Icon(
-                  Icons.check_circle,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFF6200EE)),
+      drawer: DrawerWid(
+        update: widget.update,
+      ),
+      appBar: AppBar(
+        title: Text('Sell Book'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 40.0),
+              child: TextFormField(
+                onChanged: (value) {
+                  bookName = value;
+                },
+                cursorColor: Theme.of(context).cursorColor,
+                initialValue: 'Insert Name',
+                maxLength: 20,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.favorite),
+                  labelText: 'Book Name',
+                  labelStyle: TextStyle(
+                    color: Color(0xFF6200EE),
+                  ),
+                  helperText: 'Helper text',
+                  suffixIcon: Icon(
+                    Icons.check_circle,
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF6200EE)),
+                  ),
                 ),
               ),
             ),
-          ),
           Padding(
             padding: const EdgeInsets.only(right: 40.0),
             child: TextFormField(
