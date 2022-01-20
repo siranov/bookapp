@@ -77,6 +77,7 @@ uploadBookImage(File file, load) async {
       'pic': url,
       'condition': load['condition'],
       'profname': load['profname'],
+      'authorName': load['authorName'],
     });
   } catch (err) {
     print(err);

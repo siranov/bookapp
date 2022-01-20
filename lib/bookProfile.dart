@@ -96,6 +96,8 @@ class _FullBookPageState extends State<FullBookPage> {
                 data['bookname'],
                 style: TextStyle(fontSize: 25),
               ),
+              //data['authorName']
+              Text('authorName', style: TextStyle(fontSize: 25)),
               Text(data['course'], style: TextStyle(fontSize: 25)),
               Text(data["profname"], style: TextStyle(fontSize: 25)),
               Text(data['condition'], style: TextStyle(fontSize: 25)),

@@ -11,6 +11,7 @@ String sellerName = '';
 String course = '';
 String profName = '';
 String bookName = '';
+String authorName = '';
 dynamic imageFile;
 int increment = 0;
 
@@ -92,6 +93,28 @@ class _SellBookState extends State<SellBook> {
                   hintText: 'Insert Name',
                   icon: Icon(Icons.menu_book),
                   labelText: 'Book Name',
+                  labelStyle: TextStyle(
+                    color: Colors.deepOrange,
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.deepOrange),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 40.0),
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  authorName = value;
+                  checkIncrement(value);
+                },
+                cursorColor: Theme.of(context).cursorColor,
+                decoration: InputDecoration(
+                  hintText: "Insert Author's Name",
+                  icon: Icon(Icons.person_pin_outlined),
+                  labelText: "Author's Name",
                   labelStyle: TextStyle(
                     color: Colors.deepOrange,
                   ),
@@ -266,7 +289,8 @@ class _SellBookState extends State<SellBook> {
                       'course': course, //put your course variable here
                       'price': price, //put your price variable here
                       'picFile': imageFile, //put your file variable here
-                      'condition': condition
+                      'condition': condition,
+                      'authorName': authorName
                     };
                     showDialog(
                         context: context,
