@@ -1,7 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 int curPage = 0;
+User user;
+
+userCheck() {
+  var loggedIn = true;
+  if (user == null) {
+    loggedIn = false;
+  } else {
+    if (user.isAnonymous) {
+      loggedIn = false;
+    }
+  }
+  return loggedIn;
+}
 
 class HomePage extends StatefulWidget {
   final VoidCallback update;
