@@ -69,235 +69,227 @@ class _SellBookState extends State<SellBook> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        drawer: DrawerWid(
-          update: widget.update,
+    return ListView(
+      padding: EdgeInsets.all(15),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 40.0),
+          child: TextFormField(
+            onChanged: (value) {
+              bookName = value;
+              checkIncrement(value);
+            },
+            cursorColor: Theme.of(context).cursorColor,
+            decoration: InputDecoration(
+              hintText: 'Insert Name',
+              icon: Icon(Icons.menu_book),
+              labelText: 'Book Name',
+              labelStyle: TextStyle(
+                color: Colors.deepOrange,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepOrange),
+              ),
+            ),
+          ),
         ),
-        appBar: AppBar(
-          title: Text('Sell Book'),
-          centerTitle: true,
+        Padding(
+          padding: const EdgeInsets.only(right: 40.0),
+          child: TextFormField(
+            onChanged: (value) {
+              profName = value;
+              checkIncrement(value);
+            },
+            cursorColor: Theme.of(context).cursorColor,
+            decoration: InputDecoration(
+              hintText: 'Insert Name',
+              icon: Icon(Icons.person),
+              labelText: 'Professor Name',
+              labelStyle: TextStyle(
+                color: Colors.deepOrange,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepOrange),
+              ),
+            ),
+          ),
         ),
-        body: ListView(
-          padding: EdgeInsets.all(15),
+        Padding(
+          padding: const EdgeInsets.only(right: 40.0),
+          child: TextFormField(
+            onChanged: (value) {
+              course = value;
+              checkIncrement(value);
+            },
+            cursorColor: Theme.of(context).cursorColor,
+            decoration: InputDecoration(
+              hintText: 'Insert Course',
+              icon: Icon(Icons.perm_data_setting_outlined),
+              labelText: 'Course Related to Book',
+              labelStyle: TextStyle(
+                color: Colors.deepOrange,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepOrange),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 40.0),
+          child: TextFormField(
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              price = value.length != 0 ? double.parse(value) : null;
+              checkIncrement(value);
+            },
+            cursorColor: Theme.of(context).cursorColor,
+            decoration: InputDecoration(
+              hintText: 'Insert Price',
+              icon: Icon(Icons.attach_money_outlined),
+              labelText: 'Book Price',
+              labelStyle: TextStyle(
+                color: Colors.deepOrange,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepOrange),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 40.0),
+          child: TextFormField(
+            onChanged: (value) {
+              condition = value;
+              checkIncrement(value);
+            },
+            cursorColor: Theme.of(context).cursorColor,
+            decoration: InputDecoration(
+              hintText: 'Insert Condition',
+              icon: Icon(Icons.warning_amber),
+              labelText: 'Book Condition',
+              labelStyle: TextStyle(
+                color: Colors.deepOrange,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepOrange),
+              ),
+            ),
+          ),
+        ),
+        Container(height: 40),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 40.0),
-              child: TextFormField(
-                onChanged: (value) {
-                  bookName = value;
-                  checkIncrement(value);
-                },
-                cursorColor: Theme.of(context).cursorColor,
-                decoration: InputDecoration(
-                  hintText: 'Insert Name',
-                  icon: Icon(Icons.menu_book),
-                  labelText: 'Book Name',
-                  labelStyle: TextStyle(
-                    color: Colors.deepOrange,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.deepOrange),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 40.0),
-              child: TextFormField(
-                onChanged: (value) {
-                  profName = value;
-                  checkIncrement(value);
-                },
-                cursorColor: Theme.of(context).cursorColor,
-                decoration: InputDecoration(
-                  hintText: 'Insert Name',
-                  icon: Icon(Icons.person),
-                  labelText: 'Professor Name',
-                  labelStyle: TextStyle(
-                    color: Colors.deepOrange,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.deepOrange),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 40.0),
-              child: TextFormField(
-                onChanged: (value) {
-                  course = value;
-                  checkIncrement(value);
-                },
-                cursorColor: Theme.of(context).cursorColor,
-                decoration: InputDecoration(
-                  hintText: 'Insert Course',
-                  icon: Icon(Icons.perm_data_setting_outlined),
-                  labelText: 'Course Related to Book',
-                  labelStyle: TextStyle(
-                    color: Colors.deepOrange,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.deepOrange),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 40.0),
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  price = value.length != 0 ? double.parse(value) : null;
-                  checkIncrement(value);
-                },
-                cursorColor: Theme.of(context).cursorColor,
-                decoration: InputDecoration(
-                  hintText: 'Insert Price',
-                  icon: Icon(Icons.attach_money_outlined),
-                  labelText: 'Book Price',
-                  labelStyle: TextStyle(
-                    color: Colors.deepOrange,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.deepOrange),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 40.0),
-              child: TextFormField(
-                onChanged: (value) {
-                  condition = value;
-                  checkIncrement(value);
-                },
-                cursorColor: Theme.of(context).cursorColor,
-                decoration: InputDecoration(
-                  hintText: 'Insert Condition',
-                  icon: Icon(Icons.warning_amber),
-                  labelText: 'Book Condition',
-                  labelStyle: TextStyle(
-                    color: Colors.deepOrange,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.deepOrange),
-                  ),
-                ),
-              ),
-            ),
-            Container(height: 40),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (ctxt) {
-                              return DialogWid(
-                                camera: () {
-                                  _getFromCamera();
-                                },
-                                gallery: () {
-                                  _getFromGallery();
-                                },
-                              );
-                            });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.deepOrange,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        height: 40,
-                        child: Center(
-                          child: Text(
-                            " Add Book Picture",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
+            Expanded(
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (ctxt) {
+                          return DialogWid(
+                            camera: () {
+                              _getFromCamera();
+                            },
+                            gallery: () {
+                              _getFromGallery();
+                            },
+                          );
+                        });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.deepOrange,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    height: 40,
+                    child: Center(
+                      child: Text(
+                        " Add Book Picture",
+                        style: TextStyle(fontSize: 15),
                       ),
                     ),
                   ),
                 ),
-                Container(width: 10),
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(width: 1, color: Colors.black26),
-                  ),
-                  child: picked
-                      ? Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            height: 200,
-                            width: 200,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: Image.file(
-                                imageFile,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          height: 200,
-                          width: 200,
-                          child: Center(
-                            child: Icon(Icons.image),
+              ),
+            ),
+            Container(width: 10),
+            Container(
+              height: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(width: 1, color: Colors.black26),
+              ),
+              child: picked
+                  ? Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        height: 200,
+                        width: 200,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: Image.file(
+                            imageFile,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                ),
-              ],
-            ),
-            Container(height: 30),
-            GestureDetector(
-                onTap: () {
-                  //show the dialog
-                  if (checkFields() == true) {
-                    var bookData = {
-                      'bookname': bookName, //put your bookname variable here
-                      'profname': profName,
-                      'course': course, //put your course variable here
-                      'price': price, //put your price variable here
-                      'picFile': imageFile, //put your file variable here
-                      'condition': condition
-                    };
-                    showDialog(
-                        context: context,
-                        builder: (ctxt) {
-                          return Center(
-                              child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  child:
-                                      CircularProgressIndicator())); //put your condition variable here
-                        });
-                    // uploadNewBook(bookData);
-                  } else {
-                    print('fields are empty');
-                  }
-                },
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: checkFields() ? Colors.deepOrange : Colors.grey,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Center(
-                    child: Text(
-                      " Upload Book",
-                      style: TextStyle(fontSize: 15),
+                      ),
+                    )
+                  : Container(
+                      height: 200,
+                      width: 200,
+                      child: Center(
+                        child: Icon(Icons.image),
+                      ),
                     ),
-                  ),
-                )),
+            ),
           ],
-        ));
+        ),
+        Container(height: 30),
+        GestureDetector(
+            onTap: () {
+              //show the dialog
+              if (checkFields() == true) {
+                var bookData = {
+                  'bookname': bookName, //put your bookname variable here
+                  'profname': profName,
+                  'course': course, //put your course variable here
+                  'price': price, //put your price variable here
+                  'picFile': imageFile, //put your file variable here
+                  'condition': condition
+                };
+                showDialog(
+                    context: context,
+                    builder: (ctxt) {
+                      return Center(
+                          child: Container(
+                              height: 50,
+                              width: 50,
+                              child:
+                                  CircularProgressIndicator())); //put your condition variable here
+                    });
+                // uploadNewBook(bookData);
+              } else {
+                print('fields are empty');
+              }
+            },
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: checkFields() ? Colors.deepOrange : Colors.grey,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Center(
+                child: Text(
+                  " Upload Book",
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+            )),
+      ],
+    );
   }
 }
 

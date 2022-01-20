@@ -5,6 +5,8 @@ import 'package:bookapp/sellbook.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'auth.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -31,15 +33,11 @@ class _MyAppState extends State<MyApp> {
         ),
         home:
             // TestWidget(),
-            curPage == 0
-                ? HomePage(
-                    update: sets,
-                  )
-                : curPage == 1
-                    ? SellBook(
-                        update: sets,
-                      )
-                    : MyBooks(),
+            HomePage(
+          update: () {
+            setState(() {});
+          },
+        ),
       ),
     );
   }

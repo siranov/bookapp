@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MyBooks extends StatefulWidget {
+class Search extends StatefulWidget {
   @override
-  _MyBooksState createState() => _MyBooksState();
+  _SearchState createState() => _SearchState();
 }
 
-class _MyBooksState extends State<MyBooks> {
+class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Container();
