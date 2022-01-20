@@ -1,8 +1,13 @@
 import 'package:bookapp/bookProfile.dart';
+import 'package:bookapp/profile.dart';
+import 'package:bookapp/search.dart';
 import 'package:bookapp/sellbook.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'auth.dart';
+import 'mybooks.dart';
 
 int curPage = 0;
 User user;
@@ -19,6 +24,8 @@ userCheck() {
   return loggedIn;
 }
 
+GlobalKey<ScaffoldState> scaff = new GlobalKey<ScaffoldState>();
+
 class HomePage extends StatefulWidget {
   final VoidCallback update;
 
@@ -28,26 +35,107 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  initUser() async {
+    user = await FirebaseAuth.instance.currentUser;
+  }
+
+  @override
+  void initState() {
+    initUser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaff,
       appBar: AppBar(
         title: Text('Book App'),
         centerTitle: true,
-        actions: [
-          GestureDetector(
-            child: Padding(
-                padding: EdgeInsets.only(right: 12), child: Icon(Icons.search)),
-          )
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              child: curPage == 0
+                  ? ListWidget()
+                  : curPage == 1
+                      ? Search()
+                      : curPage == 2
+                          ? (userCheck()
+                              ? SellBook(
+                                  update: () {
+                                    setState(() {});
+                                  },
+                                )
+                              : AuthPage(
+                                  update: () {
+                                    setState(() {});
+                                  },
+                                ))
+                          : ProfilePage(),
+            ),
+          ),
+          NavigBar(
+            update: () {
+              setState(() {});
+            },
+          ),
         ],
       ),
-      drawer: DrawerWid(
-        update: widget.update,
-      ),
-      body: ListWidget(),
     );
   }
 }
+
+class NavigBar extends StatelessWidget {
+  final VoidCallback update;
+
+  const NavigBar({Key key, this.update}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 55,
+      color: Colors.black12,
+      child: Row(
+        children: [
+          icoName(Icons.home, 'Home', 0),
+          icoName(Icons.search, 'Search', 1),
+          icoName(Icons.attach_money_rounded, 'Sell', 2),
+          icoName(Icons.person, 'Profile', 3),
+        ],
+      ),
+    );
+  }
+
+  Widget icoName(icon, text, i) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          curPage = i;
+          update();
+        },
+        child: Container(
+          color: Colors.transparent,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                color: curPage == i ? Colors.deepOrange : Colors.black,
+              ),
+              Text(text,
+                  style: TextStyle(
+                      fontSize: 10,
+                      color: curPage == i ? Colors.deepOrange : Colors.black)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+List<DocumentSnapshot> books = [];
 
 class ListWidget extends StatefulWidget {
   @override
@@ -56,8 +144,6 @@ class ListWidget extends StatefulWidget {
 
 class _ListWidgetState extends State<ListWidget> {
   ScrollController scroll = new ScrollController();
-
-  List<DocumentSnapshot> books = [];
 
   bool loadedFirst = false;
 
@@ -102,11 +188,15 @@ class _ListWidgetState extends State<ListWidget> {
   }
 
   loadFirstBooks() async {
-    var docs =
-        await FirebaseFirestore.instance.collection('Books').limit(5).get();
-    books.addAll(docs.docs);
-    loadedFirst = true;
-    setState(() {});
+    if (books.length == 0) {
+      var docs =
+          await FirebaseFirestore.instance.collection('Books').limit(5).get();
+      books.addAll(docs.docs);
+      loadedFirst = true;
+      setState(() {});
+    } else {
+      loadedFirst = true;
+    }
   }
 
   @override

@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'home.dart';
 
 class AuthPage extends StatefulWidget {
+  final VoidCallback update;
+
+  const AuthPage({Key key, this.update}) : super(key: key);
   @override
   _AuthPageState createState() => _AuthPageState();
 }
@@ -13,34 +17,68 @@ class _AuthPageState extends State<AuthPage> {
   String phone = '';
   String name = '';
   auth(context) async {
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: phone)
-          .then((value) {
-        user = value.user;
-        return value;
-      });
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+    if (buttonCheck()) {
+      showDialog(
+          context: context,
+          builder: (ctx) {
+            return Center(
+              child: Container(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(),
+              ),
+            );
+          });
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: email, password: phone.toString());
+        user = userCredential.user;
+        await FirebaseFirestore.instance.collection('Users').add({
+          'email': email,
+          'phone': phone,
+          'name': name,
+        });
+        Navigator.of(context).pop();
+        widget.update();
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          showDialog(
+            context: context,
+            builder: (context) =>
+                Text('The phone number provided is too short.'),
+          );
+        } else if (e.code == 'email-already-in-use') {
+          showDialog(
+            context: context,
+            builder: (context) =>
+                Text('The account already exists for that email.'),
+          );
+        }
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (context) => Text(e.toString()),
+        );
       }
-    } catch (e) {
-      print(e);
     }
   }
 
-  lineCheck() {}
+  lineCheck(String val) {
+    if (val.length == 0 || val.length == 1) {
+      setState(() {});
+    }
+  }
+
   buttonCheck() {
     bool everythingTrue = true;
-    if (email != '') {
+    if (email == '') {
       everythingTrue = false;
     }
-    if (phone != '') {
+    if (phone == '') {
       everythingTrue = false;
     }
-    if (name != '') {
+    if (name == '') {
       everythingTrue = false;
     }
     return everythingTrue;
@@ -65,6 +103,7 @@ class _AuthPageState extends State<AuthPage> {
               icon: Icons.person,
               val: (val) {
                 name = val;
+                lineCheck(val);
               },
             ),
             SmartField(
@@ -72,6 +111,7 @@ class _AuthPageState extends State<AuthPage> {
               icon: Icons.phone,
               val: (val) {
                 phone = val;
+                lineCheck(val);
               },
               type: TextInputType.phone,
             ),
@@ -79,16 +119,19 @@ class _AuthPageState extends State<AuthPage> {
               hint: 'Email',
               val: (val) {
                 email = val;
+                lineCheck(val);
               },
               icon: Icons.email,
             ),
             Divider(),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                auth(context);
+              },
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(
-                    color: Colors.deepOrange,
+                    color: buttonCheck() ? Colors.deepOrange : Colors.grey,
                     borderRadius: BorderRadius.circular(4)),
                 child: Center(
                   child: Text('Register',
