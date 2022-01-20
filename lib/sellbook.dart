@@ -97,27 +97,6 @@ class _SellBookState extends State<SellBook> {
         Padding(
           padding: const EdgeInsets.only(right: 40.0),
           child: TextFormField(
-              onChanged: (value) {
-                profName = value;
-                checkIncrement(value);
-              },
-              cursorColor: Theme.of(context).cursorColor,
-              decoration: InputDecoration(
-                hintText: 'Insert Name',
-                icon: Icon(Icons.person),
-                labelText: 'Professor Name',
-                labelStyle: TextStyle(
-                  color: Colors.deepOrange,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.deepOrange),
-                ),
-              )),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 40.0),
-          child: TextFormField(
-            keyboardType: TextInputType.number,
             onChanged: (value) {
               authorName = value;
               checkIncrement(value);
@@ -156,6 +135,26 @@ class _SellBookState extends State<SellBook> {
               ),
             ),
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 40.0),
+          child: TextFormField(
+              onChanged: (value) {
+                course = value;
+                checkIncrement(value);
+              },
+              cursorColor: Theme.of(context).cursorColor,
+              decoration: InputDecoration(
+                hintText: 'Insert Course Name',
+                icon: Icon(Icons.perm_data_setting_outlined),
+                labelText: 'Course Name',
+                labelStyle: TextStyle(
+                  color: Colors.deepOrange,
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepOrange),
+                ),
+              )),
         ),
         Padding(
           padding: const EdgeInsets.only(right: 40.0),
@@ -280,7 +279,8 @@ class _SellBookState extends State<SellBook> {
                   'course': course, //put your course variable here
                   'price': price, //put your price variable here
                   'picFile': imageFile, //put your file variable here
-                  'condition': condition
+                  'condition': condition,
+                  'authorName': authorName,
                 };
                 showDialog(
                     context: context,
@@ -292,7 +292,7 @@ class _SellBookState extends State<SellBook> {
                               child:
                                   CircularProgressIndicator())); //put your condition variable here
                     });
-                uploadNewBook(bookData);
+                uploadNewBook(bookData, context);
               } else {
                 print('fields are empty');
               }
