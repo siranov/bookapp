@@ -213,7 +213,10 @@ class _ListWidgetState extends State<ListWidget> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => FullBookPage()),
+                        MaterialPageRoute(
+                            builder: (context) => FullBookPage(
+                                  doc: books[index],
+                                )),
                       );
                     },
                     child: Padding(
