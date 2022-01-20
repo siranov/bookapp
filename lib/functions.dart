@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bookapp/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -47,12 +48,13 @@ getBooks() async {
   });
 }
 
-addBook(dataPayload) async {
+addBook(dataPayload, context) async {
   await FirebaseFirestore.instance.collection('Books').add(dataPayload);
   print('uploaded to firestore');
+  Navigator.of(context).pop();
 }
 
-uploadBookImage(File file, load) async {
+uploadBookImage(File file, load, context) async {
   var path = '/${file.path}${DateTime.now()}.png';
   print(path);
   try {
@@ -71,19 +73,19 @@ uploadBookImage(File file, load) async {
     print('uploading firestore');
     addBook({
       'bookname': load['bookname'],
-      'sellerId': 'siranov',
+      'sellerId': user.email,
       'course': load['course'],
       'price': load['price'],
       'pic': url,
       'condition': load['condition'],
       'profname': load['profname'],
       'authorName': load['authorName'],
-    });
+    }, context);
   } catch (err) {
     print(err);
   }
 }
 
-uploadNewBook(bookPayload) {
-  uploadBookImage(bookPayload['picFile'], bookPayload);
+uploadNewBook(bookPayload, context) {
+  uploadBookImage(bookPayload['picFile'], bookPayload, context);
 }
