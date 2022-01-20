@@ -49,10 +49,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaff,
-      appBar: AppBar(
-        title: Text('Book App'),
-        centerTitle: true,
-      ),
+      appBar: curPage != 1
+          ? AppBar(
+              title: Text('Book App'),
+              centerTitle: true,
+            )
+          : AppBar(
+              actions: [SearchBar()],
+            ),
       body: Column(
         children: [
           Expanded(
@@ -313,92 +317,5 @@ class _ListWidgetState extends State<ListWidget> {
                     ),
                   );
                 }));
-  }
-}
-
-class DrawerWid extends StatefulWidget {
-  final VoidCallback update;
-
-  const DrawerWid({Key key, this.update}) : super(key: key);
-  @override
-  _DrawerWidState createState() => _DrawerWidState();
-}
-
-class _DrawerWidState extends State<DrawerWid> {
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: [
-          Container(height: 80),
-          Container(
-            height: 150,
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 20, bottom: 20),
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Icon(Icons.person),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text('Guest', style: TextStyle(fontSize: 16)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          section('Main Page', Icons.home, 0, () {
-            widget.update();
-          }),
-          section('Sell', Icons.book, 1, () {
-            widget.update();
-          }),
-          section('My listings', Icons.attach_money, 2, () {
-            widget.update();
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget section(name, icon, i, callback) {
-    return GestureDetector(
-      onTap: () {
-        curPage = i;
-        callback();
-      },
-      child: Container(
-        color: curPage == i ? Colors.deepOrange : Colors.transparent,
-        height: 60,
-        child: Padding(
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(name,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: curPage == i ? Colors.white : Colors.black)),
-              ),
-              Icon(
-                icon,
-                size: 20,
-                color: curPage == i ? Colors.white : Colors.black,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
