@@ -37,7 +37,7 @@ class _SellBookState extends State<SellBook> {
       picked = true;
       setState(() {});
       Navigator.of(context).pop();
-      //remove keyboard
+      FocusManager.instance.primaryFocus?.unfocus();
     }
   }
 
@@ -55,7 +55,7 @@ class _SellBookState extends State<SellBook> {
       print('im here');
       setState(() {});
       Navigator.of(context).pop();
-      //remove keyboard
+      FocusManager.instance.primaryFocus?.unfocus();
     }
   }
 
@@ -278,7 +278,7 @@ class _SellBookState extends State<SellBook> {
                                   child:
                                       CircularProgressIndicator())); //put your condition variable here
                         });
-                    // uploadNewBook(bookData);
+                    uploadNewBook(bookData);
                   } else {
                     print('fields are empty');
                   }
