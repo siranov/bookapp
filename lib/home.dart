@@ -1,3 +1,5 @@
+import 'package:bookapp/bookProfile.dart';
+import 'package:bookapp/sellbook.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -117,51 +119,59 @@ class _ListWidgetState extends State<ListWidget> {
                 itemCount: books.length,
                 itemBuilder: (context, index) {
                   final data = books[index].data() as Map<String, dynamic>;
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        left: 10,
-                        right: 10,
-                        top: index == 0 ? 20 : 0,
-                        bottom: 20),
-                    child: Container(
-                      height: 250,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                          boxShadow: [
-                            BoxShadow(blurRadius: 3, color: Colors.black38)
-                          ]),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.all(5),
-                              child: Column(
-                                children: [
-                                  Text(data['bookname'],
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                ],
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FullBookPage()),
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          top: index == 0 ? 20 : 0,
+                          bottom: 20),
+                      child: Container(
+                        height: 250,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                            boxShadow: [
+                              BoxShadow(blurRadius: 3, color: Colors.black38)
+                            ]),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Column(
+                                  children: [
+                                    Text(data['bookname'],
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              width: double.maxFinite,
-                              height: 250,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(4),
-                                    bottomRight: Radius.circular(4)),
-                                child: Image(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(data['pic'])),
+                            Expanded(
+                              child: Container(
+                                width: double.maxFinite,
+                                height: 250,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(4),
+                                      bottomRight: Radius.circular(4)),
+                                  child: Image(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(data['pic'])),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   );

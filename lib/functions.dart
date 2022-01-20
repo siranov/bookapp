@@ -76,6 +76,7 @@ uploadBookImage(File file, load) async {
       'price': load['price'],
       'pic': url,
       'condition': load['condition'],
+      'profname': load['profname'],
     });
   } catch (err) {
     print(err);
