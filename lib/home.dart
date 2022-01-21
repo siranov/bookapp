@@ -210,6 +210,7 @@ class _ListWidgetState extends State<ListWidget> {
         width: double.maxFinite,
         child: loadedFirst
             ? ListView.builder(
+                physics: BouncingScrollPhysics(),
                 controller: scroll,
                 itemCount: books.length,
                 itemBuilder: (context, index) {
@@ -247,34 +248,66 @@ class _ListWidgetState extends State<ListWidget> {
                                 child: Column(
                                   children: [
                                     Text(data['bookname'],
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold)),
-                                    Container(
-                                      height: 120,
-                                    ),
-                                    Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 90.0),
-                                        child: Row(
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Column(
                                           children: [
-                                            Icon(Icons
-                                                .perm_data_setting_outlined),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0),
-                                              child: Text(
-                                                data['course'],
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
+                                            Container(
+                                              height: 20,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(Icons
+                                                    .perm_data_setting_outlined),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0),
+                                                  child: Text(
+                                                    data['course'],
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Container(
+                                              height: 10,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.person),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0),
+                                                    child: Text(
+                                                      'Prof. ' +
+                                                          data['profname'],
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
-                                        )),
-                                    Container(
-                                      height: 30,
+                                        ),
+                                      ),
                                     ),
                                     Text(
                                       '            ' +

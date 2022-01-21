@@ -14,6 +14,12 @@ String bookName = '';
 String authorName = '';
 dynamic imageFile;
 int increment = 0;
+TextEditingController controller1 = TextEditingController();
+TextEditingController controller2 = TextEditingController();
+TextEditingController controller3 = TextEditingController();
+TextEditingController controller4 = TextEditingController();
+TextEditingController controller5 = TextEditingController();
+TextEditingController controller6 = TextEditingController();
 
 class SellBook extends StatefulWidget {
   final update;
@@ -71,11 +77,13 @@ class _SellBookState extends State<SellBook> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      physics: BouncingScrollPhysics(),
       padding: EdgeInsets.all(15),
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 40.0),
           child: TextFormField(
+            controller: controller1,
             onChanged: (value) {
               bookName = value;
               checkIncrement(value);
@@ -97,6 +105,7 @@ class _SellBookState extends State<SellBook> {
         Padding(
           padding: const EdgeInsets.only(right: 40.0),
           child: TextFormField(
+            controller: controller2,
             onChanged: (value) {
               authorName = value;
               checkIncrement(value);
@@ -118,6 +127,7 @@ class _SellBookState extends State<SellBook> {
         Padding(
           padding: const EdgeInsets.only(right: 40.0),
           child: TextFormField(
+            controller: controller3,
             onChanged: (value) {
               profName = value;
               checkIncrement(value);
@@ -139,6 +149,7 @@ class _SellBookState extends State<SellBook> {
         Padding(
           padding: const EdgeInsets.only(right: 40.0),
           child: TextFormField(
+              controller: controller4,
               onChanged: (value) {
                 course = value;
                 checkIncrement(value);
@@ -159,6 +170,7 @@ class _SellBookState extends State<SellBook> {
         Padding(
           padding: const EdgeInsets.only(right: 40.0),
           child: TextFormField(
+            controller: controller5,
             keyboardType: TextInputType.number,
             onChanged: (value) {
               price = value.length != 0 ? double.parse(value) : null;
@@ -181,6 +193,7 @@ class _SellBookState extends State<SellBook> {
         Padding(
           padding: const EdgeInsets.only(right: 40.0),
           child: TextFormField(
+            controller: controller6,
             onChanged: (value) {
               condition = value;
               checkIncrement(value);

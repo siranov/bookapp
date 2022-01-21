@@ -89,6 +89,7 @@ class _AuthPageState extends State<AuthPage> {
     return Container(
       child: Center(
         child: ListView(
+          physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           padding: EdgeInsets.all(15),
           children: [
