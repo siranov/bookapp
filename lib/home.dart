@@ -246,6 +246,44 @@ class _ListWidgetState extends State<ListWidget> {
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold)),
+                                    Container(
+                                      height: 30,
+                                    ),
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 90.0),
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons
+                                                .perm_data_setting_outlined),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
+                                              child: Text(
+                                                data['course'],
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                    Container(
+                                      height: 120,
+                                    ),
+                                    Text(
+                                      '            ' +
+                                          data['price']
+                                              .toStringAsFixed(2)
+                                              .replaceAllMapped(
+                                                  RegExp(
+                                                      r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                                  (Match m) => "${m[1]},") +
+                                          ' \$',
+                                      style: TextStyle(fontSize: 25),
+                                      textAlign: TextAlign.end,
+                                    )
                                   ],
                                 ),
                               ),

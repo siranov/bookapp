@@ -92,14 +92,52 @@ class _FullBookPageState extends State<FullBookPage> {
               Container(
                 height: 30,
               ),
+              Text("Book's Name: ",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.deepOrange)),
               Text(
                 data['bookname'],
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 20),
               ),
-              Text(data['authorName'], style: TextStyle(fontSize: 25)),
-              Text(data['course'], style: TextStyle(fontSize: 25)),
-              Text(data["profname"], style: TextStyle(fontSize: 25)),
-              Text(data['condition'], style: TextStyle(fontSize: 25)),
+              Container(
+                height: 10,
+              ),
+              Text(
+                "Author's Name: ",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.deepOrange),
+              ),
+              Text(data['authorName'], style: TextStyle(fontSize: 20)),
+              Container(
+                height: 10,
+              ),
+              Text(
+                "Course's Name: ",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.deepOrange),
+              ),
+              Text(data['course'], style: TextStyle(fontSize: 20)),
+              Container(
+                height: 10,
+              ),
+              Text(
+                "Professor's Name: ",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.deepOrange),
+              ),
+              Text(data["profname"], style: TextStyle(fontSize: 20)),
+              Container(
+                height: 10,
+              ),
+              Text(
+                "Book Condition: ",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.deepOrange),
+              ),
+              Text(data['condition'], style: TextStyle(fontSize: 20)),
+              Container(
+                height: 25,
+              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
@@ -107,12 +145,12 @@ class _FullBookPageState extends State<FullBookPage> {
                           RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                           (Match m) => "${m[1]},") +
                       ' \$',
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontSize: 30),
                   textAlign: TextAlign.end,
                 ),
               ),
               Container(
-                height: 50,
+                height: 40,
               ),
               Row(children: [
                 Container(
