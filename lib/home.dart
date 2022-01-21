@@ -251,7 +251,7 @@ class _ListWidgetState extends State<ListWidget> {
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold)),
                                     Container(
-                                      height: 30,
+                                      height: 120,
                                     ),
                                     Padding(
                                         padding:
@@ -274,7 +274,7 @@ class _ListWidgetState extends State<ListWidget> {
                                           ],
                                         )),
                                     Container(
-                                      height: 120,
+                                      height: 30,
                                     ),
                                     Text(
                                       '            ' +
