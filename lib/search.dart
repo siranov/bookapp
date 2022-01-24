@@ -119,6 +119,7 @@ class _SearchState extends State<Search> {
                 ? tempoRes.length
                 : lastSearchPosition + 5)
         .toList();
+    print('Fetching ${fetchRange.length} documents');
     fetchRange.forEach((element) {
       docs.add(FirebaseFirestore.instance
           .collection('Books')
@@ -129,6 +130,13 @@ class _SearchState extends State<Search> {
     searchD.clear();
     setState(() {});
     await Future.wait(docs);
+    if (tempoRes.length > 1) {
+      var replaceInd =
+          searchD.indexWhere((doc) => doc.id == tempoRes[0]['docID']);
+      var val = searchD[replaceInd];
+      searchD.removeAt(replaceInd);
+      searchD.insert(0, val);
+    }
     searchResults.clear();
     docsLoading = false;
     lastSearchPosition = lastSearchPosition + 5 > tempoRes.length
@@ -153,6 +161,7 @@ class _SearchState extends State<Search> {
                     ? tempoRes.length
                     : lastSearchPosition + 5)
             .toList();
+        print('Fetching ${fetchRange.length} documents');
         fetchRange.forEach((element) {
           docs.add(FirebaseFirestore.instance
               .collection('Books')
