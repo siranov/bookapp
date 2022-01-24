@@ -280,7 +280,7 @@ class _BookWidgetState extends State<BookWidget> {
   Widget build(BuildContext context) {
     DocumentSnapshot doc = widget.doc;
     int index = widget.index;
-    final data = books[index].data() as Map<String, dynamic>;
+    final data = doc.data() as Map<String, dynamic>;
     return GestureDetector(
       onTap: () {
         Navigator.push(
