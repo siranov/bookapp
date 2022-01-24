@@ -61,17 +61,25 @@ class _SearchState extends State<Search> {
       AlgoliaQuery query = algolia.instance.index('book').query(request);
       AlgoliaQuerySnapshot snap = await query.getObjects();
       print('Completed Algolia Search');
-      noResults = snap.hits.length == 0;
       snap.hits.forEach((element) {
         var res = element.highlightResult;
         var displayResult;
+        var type;
         res.keys.forEach((elem) {
           if (res[elem]['matchLevel'] != 'none') {
             displayResult = element.data[elem];
+            type = elem;
           }
         });
-        searchResults.add({'docID': element.objectID, 'result': displayResult});
+        if (type != 'path') {
+          searchResults.add({
+            'docID': element.objectID,
+            'result': displayResult,
+            'type': type
+          });
+        }
       });
+      noResults = searchResults.length == 0;
       resultsLoading = false;
       setState(() {});
       print(searchResults);
@@ -136,6 +144,7 @@ class _SearchState extends State<Search> {
         Container(
           child: !docsLoading
               ? ListView.builder(
+                  physics: BouncingScrollPhysics(),
                   itemCount: searchD.length,
                   itemBuilder: (context, index) {
                     return BookWidget(
@@ -156,9 +165,14 @@ class _SearchState extends State<Search> {
         ),
         Align(
           alignment: Alignment.topCenter,
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 200),
-            constraints: BoxConstraints(maxHeight: 300),
+          child: Container(
+            height: resultsLoading
+                ? 50.0
+                : (searchResults.length == 0
+                    ? (noResults ? 50.0 : 0)
+                    : (searchResults.length > 6
+                        ? 300.0
+                        : searchResults.length * 50.0)),
             child: !resultsLoading
                 ? (!noResults
                     ? ListView.builder(
