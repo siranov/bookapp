@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bookapp/home.dart';
+import 'package:bookapp/sellbook.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -52,6 +53,12 @@ addBook(dataPayload, context) async {
   await FirebaseFirestore.instance.collection('Books').add(dataPayload);
   print('uploaded to firestore');
   Navigator.of(context).pop();
+  controller1.clear();
+  controller2.clear();
+  controller3.clear();
+  controller4.clear();
+  controller5.clear();
+  controller6.clear();
 }
 
 uploadBookImage(File file, load, context) async {

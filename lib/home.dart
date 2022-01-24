@@ -210,68 +210,13 @@ class _ListWidgetState extends State<ListWidget> {
         width: double.maxFinite,
         child: loadedFirst
             ? ListView.builder(
+                physics: BouncingScrollPhysics(),
                 controller: scroll,
                 itemCount: books.length,
                 itemBuilder: (context, index) {
-                  final data = books[index].data() as Map<String, dynamic>;
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FullBookPage(
-                                  doc: books[index],
-                                )),
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                          top: index == 0 ? 20 : 0,
-                          bottom: 20),
-                      child: Container(
-                        height: 250,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
-                            boxShadow: [
-                              BoxShadow(blurRadius: 3, color: Colors.black38)
-                            ]),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.all(5),
-                                child: Column(
-                                  children: [
-                                    Text(data['bookname'],
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                width: double.maxFinite,
-                                height: 250,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(4),
-                                      bottomRight: Radius.circular(4)),
-                                  child: Image(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(data['pic'])),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  return BookWidget(
+                    doc: books[index],
+                    index: index,
                   );
                 })
             : ListView.builder(
@@ -318,5 +263,133 @@ class _ListWidgetState extends State<ListWidget> {
                     ),
                   );
                 }));
+  }
+}
+
+class BookWidget extends StatefulWidget {
+  final DocumentSnapshot doc;
+  final int index;
+
+  const BookWidget({Key key, this.doc, this.index}) : super(key: key);
+  @override
+  _BookWidgetState createState() => _BookWidgetState();
+}
+
+class _BookWidgetState extends State<BookWidget> {
+  @override
+  Widget build(BuildContext context) {
+    DocumentSnapshot doc = widget.doc;
+    int index = widget.index;
+    final data = books[index].data() as Map<String, dynamic>;
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FullBookPage(
+                    doc: doc,
+                  )),
+        );
+      },
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: 10, right: 10, top: index == 0 ? 20 : 0, bottom: 20),
+        child: Container(
+          height: 250,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(4),
+              boxShadow: [BoxShadow(blurRadius: 3, color: Colors.black38)]),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                    children: [
+                      Text(data['bookname'],
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(Icons.perm_data_setting_outlined),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      data['course'],
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(Icons.person),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                        'Prof. ' + data['profname'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '            ' +
+                            data['price'].toStringAsFixed(2).replaceAllMapped(
+                                RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                (Match m) => "${m[1]},") +
+                            ' \$',
+                        style: TextStyle(fontSize: 25),
+                        textAlign: TextAlign.end,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  width: double.maxFinite,
+                  height: 250,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(4),
+                        bottomRight: Radius.circular(4)),
+                    child: Image(
+                        fit: BoxFit.cover, image: NetworkImage(data['pic'])),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
