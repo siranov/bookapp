@@ -1,6 +1,19 @@
+import 'dart:async';
+import 'package:algolia/algolia.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 TextEditingController searchC = new TextEditingController();
+Timer searchTimer;
+
+List<DocumentSnapshot> results = [];
+
+class AlgoliaApp {
+  static final Algolia algolia = Algolia.init(
+    applicationId: 'T9XQHLJ3MS',
+    apiKey: '111596de449dafab9175956361a8f21a',
+  );
+}
 
 class Search extends StatefulWidget {
   @override
@@ -8,8 +21,26 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  Algolia algolia = AlgoliaApp.algolia;
+
   listen() {
-    print(searchC.text);
+    var request = searchC.text;
+    if (request.length != 0) {
+      if (searchTimer != null) {
+        searchTimer.cancel();
+      }
+      searchTimer = new Timer(Duration(milliseconds: 500), () {
+        searchFirestore(request);
+      });
+    } else {
+      if (searchTimer != null) searchTimer.cancel();
+    }
+  }
+
+  searchFirestore(request) async {
+    AlgoliaQuery query = algolia.instance.index('contacts').query(request);
+    AlgoliaQuerySnapshot snap = await query.getObjects();
+    print('Hits count: ${snap.nbHits}');
   }
 
   @override
