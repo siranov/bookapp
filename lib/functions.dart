@@ -49,7 +49,7 @@ getBooks() async {
   });
 }
 
-addBook(dataPayload, context) async {
+addBook(dataPayload, context, done) async {
   await FirebaseFirestore.instance.collection('Books').add(dataPayload);
   print('uploaded to firestore');
   Navigator.of(context).pop();
@@ -59,9 +59,10 @@ addBook(dataPayload, context) async {
   controller4.clear();
   controller5.clear();
   controller6.clear();
+  done();
 }
 
-uploadBookImage(File file, load, context) async {
+uploadBookImage(File file, load, context, done) async {
   var path = '/${file.path}${DateTime.now()}.png';
   print(path);
   try {
@@ -87,12 +88,12 @@ uploadBookImage(File file, load, context) async {
       'condition': load['condition'],
       'profname': load['profname'],
       'authorName': load['authorName'],
-    }, context);
+    }, context, done);
   } catch (err) {
     print(err);
   }
 }
 
-uploadNewBook(bookPayload, context) {
-  uploadBookImage(bookPayload['picFile'], bookPayload, context);
+uploadNewBook(bookPayload, context, done) {
+  uploadBookImage(bookPayload['picFile'], bookPayload, context, done);
 }

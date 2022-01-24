@@ -6,10 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 TextEditingController searchC = new TextEditingController();
 StreamController<String> onSubmit = StreamController<String>.broadcast();
+ScrollController searchScroll = new ScrollController();
 Timer searchTimer;
 
 List<DocumentSnapshot> results = [];
 List<DocumentSnapshot> searchD = [];
+List tempoRes = [];
+
+int lastSearchPosition = 0;
 
 class AlgoliaApp {
   static final Algolia algolia = Algolia.init(
@@ -33,6 +37,8 @@ class _SearchState extends State<Search> {
 
   bool resultsLoading = false;
   bool docsLoading = false;
+
+  bool fetchingMore = false;
 
   listen() {
     if (prevSearch != searchC.text) {
@@ -82,7 +88,6 @@ class _SearchState extends State<Search> {
       noResults = searchResults.length == 0;
       resultsLoading = false;
       setState(() {});
-      print(searchResults);
     } catch (err) {
       print(err);
     }
@@ -105,7 +110,16 @@ class _SearchState extends State<Search> {
     FocusManager.instance.primaryFocus?.unfocus();
     docsLoading = true;
     List<Future> docs = [];
-    searchResults.forEach((element) {
+    tempoRes = [];
+    tempoRes.addAll(searchResults);
+    var fetchRange = tempoRes
+        .getRange(
+            lastSearchPosition,
+            lastSearchPosition + 5 > tempoRes.length
+                ? tempoRes.length
+                : lastSearchPosition + 5)
+        .toList();
+    fetchRange.forEach((element) {
       docs.add(FirebaseFirestore.instance
           .collection('Books')
           .doc(element['docID'])
@@ -117,7 +131,43 @@ class _SearchState extends State<Search> {
     await Future.wait(docs);
     searchResults.clear();
     docsLoading = false;
+    lastSearchPosition = lastSearchPosition + 5 > tempoRes.length
+        ? tempoRes.length
+        : lastSearchPosition + 5;
     setState(() {});
+  }
+
+  fetchMore() async {
+    if (searchScroll.position.maxScrollExtent - searchScroll.position.pixels <
+            300 &&
+        !fetchingMore) {
+      if (lastSearchPosition != tempoRes.length) {
+        fetchingMore = true;
+        print(
+            'Fetching more search documents... (From $lastSearchPosition to ${lastSearchPosition + 5 > tempoRes.length ? tempoRes.length : lastSearchPosition + 5})');
+        List<Future> docs = [];
+        var fetchRange = tempoRes
+            .getRange(
+                lastSearchPosition,
+                lastSearchPosition + 5 > tempoRes.length
+                    ? tempoRes.length
+                    : lastSearchPosition + 5)
+            .toList();
+        fetchRange.forEach((element) {
+          docs.add(FirebaseFirestore.instance
+              .collection('Books')
+              .doc(element['docID'])
+              .get()
+              .then((DocumentSnapshot ds) => searchD.add(ds)));
+        });
+        await Future.wait(docs);
+        lastSearchPosition = lastSearchPosition + 5 > tempoRes.length
+            ? tempoRes.length
+            : lastSearchPosition + 5;
+        setState(() {});
+        fetchingMore = false;
+      }
+    }
   }
 
   @override
@@ -127,6 +177,7 @@ class _SearchState extends State<Search> {
     onSubmit.stream.listen((val) {
       submit(val);
     });
+    searchScroll.addListener(fetchMore);
     super.initState();
   }
 
@@ -134,6 +185,7 @@ class _SearchState extends State<Search> {
   void dispose() {
     searchC.removeListener(listen);
     onSubmit.close();
+    searchScroll.removeListener(fetchMore);
     super.dispose();
   }
 
@@ -144,6 +196,7 @@ class _SearchState extends State<Search> {
         Container(
           child: !docsLoading
               ? ListView.builder(
+                  controller: searchScroll,
                   physics: BouncingScrollPhysics(),
                   itemCount: searchD.length,
                   itemBuilder: (context, index) {
@@ -183,6 +236,8 @@ class _SearchState extends State<Search> {
                               var res = searchResults[index];
                               searchResults.removeAt(index);
                               searchResults.insert(0, res);
+                              lastSearchPosition = 0;
+                              print(searchResults);
                               fetchFirestore();
                             },
                             child: Container(

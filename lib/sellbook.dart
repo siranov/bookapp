@@ -305,7 +305,11 @@ class _SellBookState extends State<SellBook> {
                               child:
                                   CircularProgressIndicator())); //put your condition variable here
                     });
-                uploadNewBook(bookData, context);
+                uploadNewBook(bookData, context, () {
+                  imageFile = null;
+                  picked = false;
+                  setState(() {});
+                });
               } else {
                 print('fields are empty');
               }
