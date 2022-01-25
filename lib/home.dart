@@ -269,8 +269,10 @@ class _ListWidgetState extends State<ListWidget> {
 class BookWidget extends StatefulWidget {
   final DocumentSnapshot doc;
   final int index;
+  final bool isMine;
 
-  const BookWidget({Key key, this.doc, this.index}) : super(key: key);
+  const BookWidget({Key key, this.doc, this.index, this.isMine})
+      : super(key: key);
   @override
   _BookWidgetState createState() => _BookWidgetState();
 }
@@ -360,15 +362,20 @@ class _BookWidgetState extends State<BookWidget> {
                           ),
                         ),
                       ),
-                      Text(
-                        '            ' +
-                            data['price'].toStringAsFixed(2).replaceAllMapped(
-                                RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                                (Match m) => "${m[1]},") +
-                            ' \$',
-                        style: TextStyle(fontSize: 25),
-                        textAlign: TextAlign.end,
-                      )
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          data['price'].toStringAsFixed(2).replaceAllMapped(
+                                  RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                  (Match m) => "${m[1]},") +
+                              ' \$',
+                          style: TextStyle(fontSize: 25),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                      widget.isMine != null
+                          ? deactivateButton()
+                          : SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -391,5 +398,21 @@ class _BookWidgetState extends State<BookWidget> {
         ),
       ),
     );
+  }
+
+  Widget deactivateButton() {
+    return GestureDetector(
+        onTap: () {
+          print('Send the deactivations');
+        },
+        child: Container(
+          height: 45,
+          decoration: BoxDecoration(
+              color: Colors.pink[600], borderRadius: BorderRadius.circular(4)),
+          child: Padding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Text('Deactivate', style: TextStyle(color: Colors.white)),
+          ),
+        ));
   }
 }
