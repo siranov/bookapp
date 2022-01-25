@@ -388,7 +388,19 @@ class _BookWidgetState extends State<BookWidget> {
                         topRight: Radius.circular(4),
                         bottomRight: Radius.circular(4)),
                     child: Image(
-                        fit: BoxFit.cover, image: NetworkImage(data['pic'])),
+                      fit: BoxFit.cover,
+                      image: NetworkImage(data['pic']),
+                      loadingBuilder: (context, child, loadingProgress) {
+                        return loadingProgress == null
+                            ? child
+                            : LinearProgressIndicator(
+                                color: Colors.black26,
+                                backgroundColor: Colors.black12,
+                                value: loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes,
+                              );
+                      },
+                    ),
                   ),
                 ),
               ),
