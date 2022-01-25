@@ -306,6 +306,12 @@ class _SellBookState extends State<SellBook> {
                                   CircularProgressIndicator())); //put your condition variable here
                     });
                 uploadNewBook(bookData, context, () {
+                  bookName = '';
+                  profName = '';
+                  course = '';
+                  price = null;
+                  condition = '';
+                  authorName = '';
                   imageFile = null;
                   picked = false;
                   setState(() {});

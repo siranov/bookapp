@@ -12,7 +12,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return userCheck()
         ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Container(
               //   height: 150,
@@ -41,45 +40,67 @@ class _ProfilePageState extends State<ProfilePage> {
               //     ),
               //   ]),
               // ),
-              Row(
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: Row(
+              //children: [
+
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Container(
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.deepOrange)),
+              ),
+              Container(
+                height: 25,
+              ),
+              Column(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Name: ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.deepOrange),
-                      ),
-                      Text(
-                        "User Name",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Container(
-                        height: 10,
-                      ),
-                      Text(
-                        "Email: ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.deepOrange),
-                      ),
-                      Text("User Email", style: TextStyle(fontSize: 20)),
-                      Container(
-                        height: 10,
-                      ),
-                      Text(
-                        "Phone Number: ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.deepOrange),
-                      ),
-                      Text("209 999-9999", style: TextStyle(fontSize: 20))
-                    ],
-                  )
+                  Text(
+                    "Name: ",
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepOrange),
+                  ),
+                  Container(
+                    height: 7,
+                  ),
+                  Text(
+                    "User Name",
+                  ),
+                  Container(
+                    height: 15,
+                  ),
+                  Text(
+                    "Email: ",
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepOrange),
+                  ),
+                  Container(
+                    height: 7,
+                  ),
+                  Text("User Email"),
+                  Container(
+                    height: 15,
+                  ),
+                  Text(
+                    "Phone Number: ",
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepOrange),
+                  ),
+                  Container(
+                    height: 7,
+                  ),
+                  Text("209 999-9999")
                 ],
-              )
+              ),
             ],
           )
         : AuthPage();
