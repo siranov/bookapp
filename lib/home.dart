@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'auth.dart';
-import 'mybooks.dart';
 
 int curPage = 0;
 User user;
@@ -401,18 +400,17 @@ class _BookWidgetState extends State<BookWidget> {
   }
 
   Widget deactivateButton() {
-    return GestureDetector(
-        onTap: () {
-          print('Send the deactivations');
-        },
-        child: Container(
-          height: 45,
-          decoration: BoxDecoration(
-              color: Colors.pink[600], borderRadius: BorderRadius.circular(4)),
-          child: Padding(
-            padding: EdgeInsets.only(left: 10, right: 10),
-            child: Text('Deactivate', style: TextStyle(color: Colors.white)),
-          ),
-        ));
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Padding(
+        padding: EdgeInsets.only(top: 5),
+        child: GestureDetector(
+            onTap: () {
+              print('Send the deactivations');
+            },
+            child: Text('Deactivate',
+                style: TextStyle(color: Colors.red[900], fontSize: 16))),
+      ),
+    );
   }
 }

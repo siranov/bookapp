@@ -1,11 +1,6 @@
-import 'package:bookapp/functions.dart';
 import 'package:bookapp/home.dart';
-import 'package:bookapp/mybooks.dart';
-import 'package:bookapp/sellbook.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import 'auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
