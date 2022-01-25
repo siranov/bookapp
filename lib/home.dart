@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'auth.dart';
-import 'mybooks.dart';
 
 int curPage = 0;
 User user;
@@ -269,8 +268,10 @@ class _ListWidgetState extends State<ListWidget> {
 class BookWidget extends StatefulWidget {
   final DocumentSnapshot doc;
   final int index;
+  final bool isMine;
 
-  const BookWidget({Key key, this.doc, this.index}) : super(key: key);
+  const BookWidget({Key key, this.doc, this.index, this.isMine})
+      : super(key: key);
   @override
   _BookWidgetState createState() => _BookWidgetState();
 }
@@ -360,15 +361,20 @@ class _BookWidgetState extends State<BookWidget> {
                           ),
                         ),
                       ),
-                      Text(
-                        '            ' +
-                            data['price'].toStringAsFixed(2).replaceAllMapped(
-                                RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                                (Match m) => "${m[1]},") +
-                            ' \$',
-                        style: TextStyle(fontSize: 25),
-                        textAlign: TextAlign.end,
-                      )
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          data['price'].toStringAsFixed(2).replaceAllMapped(
+                                  RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                  (Match m) => "${m[1]},") +
+                              ' \$',
+                          style: TextStyle(fontSize: 25),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                      widget.isMine != null
+                          ? deactivateButton()
+                          : SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -382,13 +388,40 @@ class _BookWidgetState extends State<BookWidget> {
                         topRight: Radius.circular(4),
                         bottomRight: Radius.circular(4)),
                     child: Image(
-                        fit: BoxFit.cover, image: NetworkImage(data['pic'])),
+                      fit: BoxFit.cover,
+                      image: NetworkImage(data['pic']),
+                      loadingBuilder: (context, child, loadingProgress) {
+                        return loadingProgress == null
+                            ? child
+                            : LinearProgressIndicator(
+                                color: Colors.black26,
+                                backgroundColor: Colors.black12,
+                                value: loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes,
+                              );
+                      },
+                    ),
                   ),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget deactivateButton() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Padding(
+        padding: EdgeInsets.only(top: 5),
+        child: GestureDetector(
+            onTap: () {
+              print('Send the deactivations');
+            },
+            child: Text('Deactivate',
+                style: TextStyle(color: Colors.red[900], fontSize: 16))),
       ),
     );
   }

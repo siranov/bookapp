@@ -1,6 +1,9 @@
 import 'package:bookapp/auth.dart';
 import 'package:bookapp/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+ScrollController profC = new ScrollController();
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -8,43 +11,32 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  List<DocumentSnapshot> myBooks = [];
+
+  fetchMyBooks() async {
+    await FirebaseFirestore.instance
+        .collection('Books')
+        .where('sellerId', isEqualTo: user.email)
+        .limit(5)
+        .get()
+        .then((qs) {
+      myBooks.addAll(qs.docs);
+    });
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    fetchMyBooks();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return userCheck()
-        ? Column(
+        ? ListView(
+            controller: profC,
             children: [
-              // Container(
-              //   height: 150,
-              //   child: Row(children: [
-              //     Column(
-              //       children: [
-              //         Padding(
-              //           padding: EdgeInsets.only(top: 20, bottom: 20),
-              //           child: Container(
-              //             height: 40,
-              //             width: 40,
-              //             decoration: BoxDecoration(
-              //               shape: BoxShape.circle,
-              //             ),
-              //             child: Center(
-              //               child: Icon(Icons.person),
-              //             ),
-              //           ),
-              //         ),
-              //         Expanded(
-              //           child: Center(
-              //             child: Text('Guest', style: TextStyle(fontSize: 16)),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ]),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: Row(
-              //children: [
-
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Stack(
@@ -132,6 +124,22 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   Text("209 999-9999")
                 ],
+              ),
+              Container(height: 20),
+              Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Text('My Listings:',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              ),
+              Column(
+                children: List.generate(myBooks.length, (index) {
+                  return BookWidget(
+                    doc: myBooks[index],
+                    index: index,
+                    isMine: true,
+                  );
+                }),
               ),
             ],
           )
