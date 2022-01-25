@@ -47,14 +47,46 @@ class _ProfilePageState extends State<ProfilePage> {
 
               Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: Container(
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.deepOrange)),
+                child: Stack(
+                  children: [
+                    Container(
+                      // child: Icon(
+                      //   Icons.person,
+                      //   size: 40,
+                      // ),
+
+                      child: Center(
+                          child: Text(
+                        "🤩",
+                        style: TextStyle(fontSize: 115),
+                      )),
+                      height: 150,
+                      width: 170,
+                    ),
+                    Positioned(
+                      left: 125,
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return dialog();
+                            },
+                          );
+                        },
+                        child: Container(
+                            child: Icon(Icons.edit),
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.black12)),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Container(
-                height: 25,
+                height: 7,
               ),
               Column(
                 children: [
@@ -104,5 +136,35 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           )
         : AuthPage();
+  }
+
+  Widget dialog() {
+    return Center(
+      child: Container(
+        color: Colors.orange.shade300,
+        height: 150,
+        width: 350,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              child: Text("🤩", style: TextStyle(fontSize: 80)),
+              height: 100,
+              width: 100,
+            ),
+            Container(
+              child: Text("😜", style: TextStyle(fontSize: 80)),
+              height: 100,
+              width: 100,
+            ),
+            Container(
+              child: Text("🥱", style: TextStyle(fontSize: 80)),
+              height: 100,
+              width: 100,
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
