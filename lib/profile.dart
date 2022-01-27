@@ -3,7 +3,7 @@ import 'package:bookapp/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-String emoji = "🤩";
+String emoji = "";
 ScrollController profC = new ScrollController();
 DocumentSnapshot userDoc;
 
@@ -54,6 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final data = userDoc != null ? userDoc.data() as Map : {};
+    emoji = userDoc != null ? ((emoji == "") ? data['emoji'] : emoji) : emoji;
     return userCheck()
         ? ready
             ? ListView(
@@ -66,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           child: Center(
                               child: Text(
-                            data['emoji'],
+                            emoji,
                             style: TextStyle(fontSize: 115),
                           )),
                           height: 150,
@@ -101,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Column(
                     children: [
                       Text(
-                        "Name: ",
+                        "Name",
                         style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
@@ -117,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         height: 15,
                       ),
                       Text(
-                        data['email'],
+                        "Email",
                         style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
@@ -126,12 +127,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       Container(
                         height: 7,
                       ),
-                      Text("User Email"),
+                      Text(data['email']),
                       Container(
                         height: 15,
                       ),
                       Text(
-                        "Phone Number: ",
+                        "Phone Number",
                         style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
@@ -171,6 +172,17 @@ class _ProfilePageState extends State<ProfilePage> {
         : AuthPage();
   }
 
+  updateEmoji() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userDoc.id)
+        .update({
+      'emoji': emoji,
+    }).then((done) => Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text('Updated the emoji. '),
+            )));
+  }
+
   Widget dialog() {
     return Center(
       child: Container(
@@ -190,9 +202,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: () {
                       emoji = "🤩";
-
                       setState(() {});
                       Navigator.of(context).pop();
+                      updateEmoji();
                     },
                     child: Container(
                       child: Text("🤩", style: TextStyle(fontSize: 80)),
@@ -203,9 +215,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: () {
                       emoji = "😜";
-
                       setState(() {});
                       Navigator.of(context).pop();
+                      updateEmoji();
                     },
                     child: Container(
                       child: Text("😜", style: TextStyle(fontSize: 80)),
@@ -216,9 +228,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: () {
                       emoji = "🥱";
-
                       setState(() {});
                       Navigator.of(context).pop();
+                      updateEmoji();
                     },
                     child: Container(
                       child: Text("🥱", style: TextStyle(fontSize: 80)),
@@ -234,9 +246,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: () {
                       emoji = "🤤";
-
                       setState(() {});
                       Navigator.of(context).pop();
+                      updateEmoji();
                     },
                     child: Container(
                       child: Text("🤤", style: TextStyle(fontSize: 80)),
@@ -247,9 +259,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: () {
                       emoji = "🤑";
-
                       setState(() {});
                       Navigator.of(context).pop();
+                      updateEmoji();
                     },
                     child: Container(
                       child: Text("🤑", style: TextStyle(fontSize: 80)),
@@ -260,9 +272,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: () {
                       emoji = "🤓";
-
                       setState(() {});
                       Navigator.of(context).pop();
+                      updateEmoji();
                     },
                     child: Container(
                       child: Text("🤓", style: TextStyle(fontSize: 80)),
@@ -278,9 +290,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: () {
                       emoji = "🥴";
-
                       setState(() {});
                       Navigator.of(context).pop();
+                      updateEmoji();
                     },
                     child: Container(
                       child: Text("🥴", style: TextStyle(fontSize: 80)),
@@ -291,9 +303,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: () {
                       emoji = "😷";
-
                       setState(() {});
                       Navigator.of(context).pop();
+                      updateEmoji();
                     },
                     child: Container(
                       child: Text("😷", style: TextStyle(fontSize: 80)),
@@ -304,9 +316,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: () {
                       emoji = "😳";
-
                       setState(() {});
                       Navigator.of(context).pop();
+                      updateEmoji();
                     },
                     child: Container(
                       child: Text("😳", style: TextStyle(fontSize: 80)),
