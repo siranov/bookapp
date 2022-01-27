@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 String emoji = "🤩";
 ScrollController profC = new ScrollController();
+DocumentSnapshot userDoc;
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   List<DocumentSnapshot> myBooks = [];
+
+  bool ready = false;
 
   fetchMyBooks() async {
     await FirebaseFirestore.instance
@@ -26,124 +29,145 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {});
   }
 
+  fetchUser() async {
+    if (userDoc == null) {
+      var email = user.email;
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: email)
+          .get()
+          .then((qs) {
+        userDoc = qs.docs.first;
+      });
+    }
+    ready = true;
+    setState(() {});
+  }
+
   @override
   void initState() {
     fetchMyBooks();
+    fetchUser();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final data = userDoc != null ? userDoc.data() as Map : {};
     return userCheck()
-        ? ListView(
-            controller: profC,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Stack(
-                  children: [
-                    Container(
-                      // child: Icon(
-                      //   Icons.person,
-                      //   size: 40,
-                      // ),
-
-                      child: Center(
-                          child: Text(
-                        emoji,
-                        style: TextStyle(fontSize: 115),
-                      )),
-                      height: 150,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    Positioned(
-                      left: 225,
-                      child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return dialog();
-                            },
-                          );
-                        },
-                        child: Container(
-                            child: Icon(Icons.edit),
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.black12)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 7,
-              ),
-              Column(
+        ? ready
+            ? ListView(
+                controller: profC,
                 children: [
-                  Text(
-                    "Name: ",
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepOrange),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Stack(
+                      children: [
+                        Container(
+                          child: Center(
+                              child: Text(
+                            data['emoji'],
+                            style: TextStyle(fontSize: 115),
+                          )),
+                          height: 150,
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                        Positioned(
+                          left: 225,
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return dialog();
+                                },
+                              );
+                            },
+                            child: Container(
+                                child: Icon(Icons.edit),
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black12)),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Container(
                     height: 7,
                   ),
-                  Text(
-                    "User Name",
+                  Column(
+                    children: [
+                      Text(
+                        "Name: ",
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepOrange),
+                      ),
+                      Container(
+                        height: 7,
+                      ),
+                      Text(
+                        data['name'],
+                      ),
+                      Container(
+                        height: 15,
+                      ),
+                      Text(
+                        data['email'],
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepOrange),
+                      ),
+                      Container(
+                        height: 7,
+                      ),
+                      Text("User Email"),
+                      Container(
+                        height: 15,
+                      ),
+                      Text(
+                        "Phone Number: ",
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepOrange),
+                      ),
+                      Container(
+                        height: 7,
+                      ),
+                      Text(data['phone'])
+                    ],
                   ),
-                  Container(
-                    height: 15,
+                  Container(height: 20),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text('My Listings:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
                   ),
-                  Text(
-                    "Email: ",
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepOrange),
+                  Column(
+                    children: List.generate(myBooks.length, (index) {
+                      return BookWidget(
+                        doc: myBooks[index],
+                        index: index,
+                        isMine: true,
+                      );
+                    }),
                   ),
-                  Container(
-                    height: 7,
-                  ),
-                  Text("User Email"),
-                  Container(
-                    height: 15,
-                  ),
-                  Text(
-                    "Phone Number: ",
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepOrange),
-                  ),
-                  Container(
-                    height: 7,
-                  ),
-                  Text("209 999-9999")
                 ],
-              ),
-              Container(height: 20),
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Text('My Listings:',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-              ),
-              Column(
-                children: List.generate(myBooks.length, (index) {
-                  return BookWidget(
-                    doc: myBooks[index],
-                    index: index,
-                    isMine: true,
-                  );
-                }),
-              ),
-            ],
-          )
+              )
+            : Container(
+                child: Center(
+                  child: Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: LinearProgressIndicator()),
+                ),
+              )
         : AuthPage();
   }
 
