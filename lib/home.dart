@@ -51,7 +51,11 @@ class _HomePageState extends State<HomePage> {
       key: scaff,
       appBar: curPage != 1
           ? AppBar(
-              title: Text('Book App'),
+              title: Text(curPage == 0
+                  ? 'Book App'
+                  : curPage == 2
+                      ? 'Selling Books'
+                      : 'Your Profile'),
               centerTitle: true,
             )
           : AppBar(
@@ -418,7 +422,11 @@ class _BookWidgetState extends State<BookWidget> {
         padding: EdgeInsets.only(top: 5),
         child: GestureDetector(
             onTap: () {
-              print('Send the deactivations');
+              Scaffold.of(context).hideCurrentSnackBar();
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    'Will come in a future update. For now, contact siranoov@gmail.com for changes.'),
+              ));
             },
             child: Text('Deactivate',
                 style: TextStyle(color: Colors.red[900], fontSize: 16))),

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bookapp/profWid.dart';
 import 'package:bookapp/sellbook.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -176,27 +177,10 @@ class _FullBookPageState extends State<FullBookPage> {
                     Container(
                       height: 40,
                     ),
-                    Row(children: [
-                      Container(
-                          child: Icon(
-                            Icons.person,
-                            size: 40,
-                          ),
-                          height: 130,
-                          width: 130,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.deepOrange)),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text('Name:'),
-                            Text('Phone:'),
-                            Text('Email:')
-                          ],
-                        ),
-                      )
-                    ])
+                    ProfileWid(
+                      book: widget.doc,
+                    ),
+                    Container(height: 40),
                   ]),
             ),
           ],

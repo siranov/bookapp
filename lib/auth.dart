@@ -38,6 +38,7 @@ class _AuthPageState extends State<AuthPage> {
           'email': email,
           'phone': phone,
           'name': name,
+          'emoji': '😁',
         });
         Navigator.of(context).pop();
         widget.update();
