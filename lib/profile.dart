@@ -3,6 +3,7 @@ import 'package:bookapp/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+String emoji = "🤩";
 ScrollController profC = new ScrollController();
 
 class ProfilePage extends StatefulWidget {
@@ -39,14 +40,46 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: Container(
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.deepOrange)),
+                child: Stack(
+                  children: [
+                    Container(
+                      // child: Icon(
+                      //   Icons.person,
+                      //   size: 40,
+                      // ),
+
+                      child: Center(
+                          child: Text(
+                        emoji,
+                        style: TextStyle(fontSize: 115),
+                      )),
+                      height: 150,
+                      width: MediaQuery.of(context).size.width,
+                    ),
+                    Positioned(
+                      left: 225,
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return dialog();
+                            },
+                          );
+                        },
+                        child: Container(
+                            child: Icon(Icons.edit),
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.black12)),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Container(
-                height: 25,
+                height: 7,
               ),
               Column(
                 children: [
@@ -112,5 +145,155 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           )
         : AuthPage();
+  }
+
+  Widget dialog() {
+    return Center(
+      child: Container(
+          height: 320,
+          width: 350,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.orange.shade300),
+          child: Column(
+            children: [
+              Container(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      emoji = "🤩";
+
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Text("🤩", style: TextStyle(fontSize: 80)),
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      emoji = "😜";
+
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Text("😜", style: TextStyle(fontSize: 80)),
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      emoji = "🥱";
+
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Text("🥱", style: TextStyle(fontSize: 80)),
+                      height: 100,
+                      width: 100,
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      emoji = "🤤";
+
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Text("🤤", style: TextStyle(fontSize: 80)),
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      emoji = "🤑";
+
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Text("🤑", style: TextStyle(fontSize: 80)),
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      emoji = "🤓";
+
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Text("🤓", style: TextStyle(fontSize: 80)),
+                      height: 100,
+                      width: 100,
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      emoji = "🥴";
+
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Text("🥴", style: TextStyle(fontSize: 80)),
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      emoji = "😷";
+
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Text("😷", style: TextStyle(fontSize: 80)),
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      emoji = "😳";
+
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Text("😳", style: TextStyle(fontSize: 80)),
+                      height: 100,
+                      width: 100,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          )),
+    );
   }
 }
