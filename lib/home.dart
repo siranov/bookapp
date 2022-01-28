@@ -417,7 +417,7 @@ class _BookWidgetState extends State<BookWidget> {
 
   Widget deactivateButton() {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: Alignment.bottomRight,
       child: Padding(
         padding: EdgeInsets.only(top: 5),
         child: GestureDetector(
